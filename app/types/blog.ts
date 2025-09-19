@@ -1,0 +1,68 @@
+// 블로그 관련 타입 정의
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string;
+  published: boolean;
+  publishedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+  tags: string[];
+  featuredImage: string | null;
+  readingTime: number;
+}
+
+export interface Tag {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  color: string;
+  createdAt: Date;
+}
+
+// 블로그 포스트 생성/수정용 타입
+export interface CreateBlogPost {
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string;
+  published?: boolean;
+  publishedAt?: Date | null;
+  tags?: string[];
+  featuredImage?: string | null;
+  readingTime?: number;
+}
+
+export interface UpdateBlogPost extends Partial<CreateBlogPost> {
+  id: string;
+}
+
+// 태그 생성/수정용 타입
+export interface CreateTag {
+  name: string;
+  slug: string;
+  description?: string | null;
+  color?: string;
+}
+
+export interface UpdateTag extends Partial<CreateTag> {
+  id: string;
+}
+
+// API 응답 타입
+export interface BlogPostResponse {
+  posts: BlogPost[];
+  total: number;
+  page: number;
+  limit: number;
+  hasMore: boolean;
+}
+
+export interface TagResponse {
+  tags: Tag[];
+  total: number;
+}
