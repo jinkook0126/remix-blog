@@ -1,0 +1,150 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* 네이버 나눔스퀘어 나노 폰트 */
+@import url("https://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+/* 기본 스타일 */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-secondary-50 text-secondary-900 font-sans;
+    line-height: 1.7;
+  }
+
+  /* 선택된 텍스트 스타일 */
+  ::selection {
+    @apply bg-primary-200 text-primary-900;
+  }
+
+  /* 스크롤바 스타일 */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-secondary-100;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-secondary-300 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-secondary-400;
+  }
+}
+
+/* 컴포넌트 스타일 */
+@layer components {
+  /* 버튼 스타일 */
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+  }
+
+  .btn-secondary {
+    @apply btn bg-secondary-200 text-secondary-900 hover:bg-secondary-300 focus:ring-secondary-500;
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent text-secondary-700 hover:bg-secondary-100 focus:ring-secondary-500;
+  }
+
+  /* 카드 스타일 */
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-secondary-200 p-6;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  /* 링크 스타일 */
+  .link {
+    @apply text-primary-600 hover:text-primary-700 transition-colors duration-200;
+  }
+
+  .link-underline {
+    @apply link underline decoration-2 underline-offset-2 hover:decoration-primary-500;
+  }
+
+  /* 강조 텍스트 스타일 */
+  .highlight-blue {
+    @apply text-highlight-blue font-semibold;
+  }
+
+  .highlight-green {
+    @apply text-highlight-green font-semibold;
+  }
+
+  .highlight-purple {
+    @apply text-highlight-purple font-semibold;
+  }
+
+  .highlight-orange {
+    @apply text-highlight-orange font-semibold;
+  }
+
+  .highlight-pink {
+    @apply text-highlight-pink font-semibold;
+  }
+
+  /* 그라데이션 배경 */
+  .gradient-bg {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  }
+
+  /* 글래스모피즘 효과 */
+  .glass {
+    @apply bg-white/80 backdrop-blur-sm border border-white/20;
+  }
+
+  /* 애니메이션 */
+  .fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+  }
+
+  .slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* 유틸리티 클래스 */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
