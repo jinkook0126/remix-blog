@@ -1,10 +1,10 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, Link } from "@remix-run/react";
-import { getBlogPosts } from "~/lib/supabase";
+import { getBlogPosts } from "~/lib/database";
 import Navigation from "~/components/Navigation";
 import Footer from "~/components/Footer";
 import BlogCard from "~/components/BlogCard";
-import type { BlogPost } from "~/lib/supabase";
+import type { BlogPost } from "~/types";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { tag } = params;

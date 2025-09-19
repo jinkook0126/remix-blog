@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import type { BlogPost } from "~/lib/supabase";
+import type { BlogPost } from "~/types";
 
 interface BlogCardProps {
   post: BlogPost;
@@ -8,23 +8,33 @@ interface BlogCardProps {
 
 const BlogCard = ({ post, featured = false }: BlogCardProps) => {
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+    return new Date(dateString).toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
   const getHighlightColor = (index: number) => {
-    const colors = ['highlight-blue', 'highlight-green', 'highlight-purple', 'highlight-orange', 'highlight-pink'];
+    const colors = [
+      "highlight-blue",
+      "highlight-green",
+      "highlight-purple",
+      "highlight-orange",
+      "highlight-pink",
+    ];
     return colors[index % colors.length];
   };
 
   return (
-    <article className={`card-hover ${featured ? 'lg:col-span-2' : ''}`}>
+    <article className={`card-hover ${featured ? "lg:col-span-2" : ""}`}>
       {/* 이미지 */}
       {post.featured_image && (
-        <div className={`mb-4 ${featured ? 'h-64' : 'h-48'} overflow-hidden rounded-lg`}>
+        <div
+          className={`mb-4 ${
+            featured ? "h-64" : "h-48"
+          } overflow-hidden rounded-lg`}
+        >
           <img
             src={post.featured_image}
             alt={post.title}
@@ -41,7 +51,9 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
             {post.tags.slice(0, 3).map((tag, index) => (
               <span
                 key={tag}
-                className={`px-2 py-1 text-xs font-medium rounded-full bg-secondary-100 text-secondary-700 ${getHighlightColor(index)}`}
+                className={`px-2 py-1 text-xs font-medium rounded-full bg-secondary-100 text-secondary-700 ${getHighlightColor(
+                  index
+                )}`}
               >
                 {tag}
               </span>
@@ -55,7 +67,11 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
         )}
 
         {/* 제목 */}
-        <h2 className={`font-bold text-secondary-900 leading-tight ${featured ? 'text-2xl' : 'text-xl'}`}>
+        <h2
+          className={`font-bold text-secondary-900 leading-tight ${
+            featured ? "text-2xl" : "text-xl"
+          }`}
+        >
           <Link
             to={`/blog/${post.slug}`}
             className="hover:text-primary-600 transition-colors duration-200"
