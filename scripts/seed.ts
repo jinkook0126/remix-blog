@@ -14,7 +14,7 @@ async function main() {
     data: [
       {
         name: "웹개발",
-        slug: "web-development",
+        slug: "웹개발",
         description: "웹 개발 관련 포스트",
         color: "#3b82f6",
       },
@@ -32,13 +32,13 @@ async function main() {
       },
       {
         name: "블로그",
-        slug: "blog",
+        slug: "블로그",
         description: "블로그 운영 관련 포스트",
         color: "#10b981",
       },
       {
         name: "디자인",
-        slug: "design",
+        slug: "디자인",
         description: "UI/UX 디자인 관련 포스트",
         color: "#f59e0b",
       },

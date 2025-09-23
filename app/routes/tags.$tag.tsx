@@ -14,7 +14,6 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   }
 
   const posts = await getPostsByTag(tag, 50, 0);
-
   return json({ posts, tag });
 };
 
@@ -84,7 +83,7 @@ export default function TagPage() {
         <section className="py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {posts.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
                 {posts.map((post: BlogPost, index: number) => (
                   <div
                     key={post.id}

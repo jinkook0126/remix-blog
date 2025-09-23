@@ -29,24 +29,40 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
   };
 
   return (
-    <article className={`card-hover ${featured ? "lg:col-span-2" : ""}`}>
-      {/* 이미지 */}
-      {post.featuredImage && (
-        <div
-          className={`mb-4 ${
-            featured ? "h-64" : "h-48"
-          } overflow-hidden rounded-lg`}
-        >
+    <article
+      className={`card-hover flex flex-col h-full ${
+        featured ? "lg:col-span-2" : ""
+      }`}
+    >
+      {/* 이미지 - 항상 동일한 높이로 표시 */}
+      <div className={`mb-4 h-48 overflow-hidden rounded-lg flex-shrink-0`}>
+        {post.featuredImage ? (
           <img
             src={post.featuredImage}
             alt={post.title}
             className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
           />
-        </div>
-      )}
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-secondary-100 to-secondary-200 flex items-center justify-center">
+            <svg
+              className="w-12 h-12 text-secondary-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+        )}
+      </div>
 
       {/* 콘텐츠 */}
-      <div className="space-y-3">
+      <div className="flex flex-col flex-grow space-y-3">
         {/* 태그 */}
         {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2">
@@ -87,19 +103,10 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
           {post.excerpt}
         </p>
 
-        {/* 메타 정보 */}
-        <div className="flex items-center justify-between pt-2">
-          <div className="flex items-center space-x-3">
-            {/* 작성자 아바타 */}
-            <div className="w-8 h-8 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-medium">D</span>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-secondary-900">Dairium</p>
-              <p className="text-xs text-secondary-500">
-                {dayjs(post.publishedAt).format("YYYY년 MM월 DD일")}
-              </p>
-            </div>
+        {/* 메타 정보 - 카드 하단에 고정 */}
+        <div className="flex items-center justify-between pt-2 mt-auto">
+          <div className="text-xs text-secondary-500">
+            {dayjs(post.publishedAt).format("YYYY년 MM월 DD일")}
           </div>
 
           {/* 읽기 시간 */}

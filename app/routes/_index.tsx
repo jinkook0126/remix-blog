@@ -74,7 +74,7 @@ export default function Index() {
             </div>
 
             {posts.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
                 {posts.map((post: BlogPost, index: number) => (
                   <div
                     key={post.id}
