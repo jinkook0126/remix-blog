@@ -1,9 +1,15 @@
 import { Link } from "@remix-run/react";
 
+type FooterLink = {
+  name: string;
+  href: string;
+  external?: boolean;
+};
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  const footerLinks = {
+  const footerLinks: Record<string, FooterLink[]> = {
     블로그: [
       { name: "최신 포스트", href: "/blog" },
       { name: "인기 포스트", href: "/blog/popular" },
@@ -34,8 +40,8 @@ const Footer = () => {
               <span className="text-xl font-bold">Dairium</span>
             </Link>
             <p className="text-secondary-300 text-sm leading-relaxed">
-              현대적이고 눈이 편안한 블로그 플랫폼입니다. 
-              Remix와 Supabase로 구축되었습니다.
+              현대적이고 눈이 편안한 블로그 플랫폼입니다. Remix와 Supabase로
+              구축되었습니다.
             </p>
           </div>
 

@@ -1,20 +1,20 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, Link } from "@remix-run/react";
-import { getBlogPostBySlug, getRelatedPosts } from "~/lib/supabase";
+import { getBlogPostBySlug, getRelatedPosts } from "~/lib/database";
 import Navigation from "~/components/Navigation";
 import Footer from "~/components/Footer";
 import BlogCard from "~/components/BlogCard";
-import type { BlogPost } from "~/lib/supabase";
+import type { BlogPost } from "~/types";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { slug } = params;
-  
+
   if (!slug) {
     throw new Response("Not Found", { status: 404 });
   }
 
   const post = await getBlogPostBySlug(slug);
-  
+
   if (!post) {
     throw new Response("Not Found", { status: 404 });
   }
@@ -26,13 +26,11 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
 export const meta = ({ data }: { data: { post: BlogPost } }) => {
   if (!data) {
-    return [
-      { title: "포스트를 찾을 수 없습니다 - Dairium Blog" },
-    ];
+    return [{ title: "포스트를 찾을 수 없습니다 - Dairium Blog" }];
   }
 
   const { post } = data;
-  
+
   return [
     { title: `${post.title} - Dairium Blog` },
     { name: "description", content: post.excerpt },
@@ -40,38 +38,54 @@ export const meta = ({ data }: { data: { post: BlogPost } }) => {
     { property: "og:title", content: post.title },
     { property: "og:description", content: post.excerpt },
     { property: "og:type", content: "article" },
-    { property: "og:url", content: `https://dairium-blog.com/blog/${post.slug}` },
-    { property: "og:image", content: post.featured_image || "https://dairium-blog.com/og-image.jpg" },
-    { property: "article:published_time", content: post.published_at },
-    { property: "article:author", content: post.author.name },
+    {
+      property: "og:url",
+      content: `https://dairium-blog.com/blog/${post.slug}`,
+    },
+    {
+      property: "og:image",
+      content: post.featuredImage || "https://dairium-blog.com/og-image.jpg",
+    },
+    { property: "article:published_time", content: post.publishedAt || "" },
+    { property: "article:author", content: "Dairium" },
     { property: "article:tag", content: post.tags.join(", ") },
     { property: "twitter:card", content: "summary_large_image" },
     { property: "twitter:title", content: post.title },
     { property: "twitter:description", content: post.excerpt },
-    { property: "twitter:image", content: post.featured_image || "https://dairium-blog.com/og-image.jpg" },
+    {
+      property: "twitter:image",
+      content: post.featuredImage || "https://dairium-blog.com/og-image.jpg",
+    },
   ];
 };
 
 export default function BlogPost() {
   const { post, relatedPosts } = useLoaderData<typeof loader>();
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return "";
+    return new Date(dateString).toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
   const getHighlightColor = (index: number) => {
-    const colors = ['highlight-blue', 'highlight-green', 'highlight-purple', 'highlight-orange', 'highlight-pink'];
+    const colors = [
+      "highlight-blue",
+      "highlight-green",
+      "highlight-purple",
+      "highlight-orange",
+      "highlight-pink",
+    ];
     return colors[index % colors.length];
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
-      
+
       <main className="flex-1">
         {/* 포스트 헤더 */}
         <article className="py-16">
@@ -82,7 +96,9 @@ export default function BlogPost() {
                 {post.tags.map((tag, index) => (
                   <span
                     key={tag}
-                    className={`px-3 py-1 text-sm font-medium rounded-full bg-secondary-100 text-secondary-700 ${getHighlightColor(index)}`}
+                    className={`px-3 py-1 text-sm font-medium rounded-full bg-secondary-100 text-secondary-700 ${getHighlightColor(
+                      index
+                    )}`}
                   >
                     {tag}
                   </span>
@@ -104,30 +120,26 @@ export default function BlogPost() {
             <div className="flex items-center justify-between py-6 border-t border-b border-secondary-200 mb-8">
               <div className="flex items-center space-x-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-lg font-medium">
-                    {post.author.name.charAt(0).toUpperCase()}
-                  </span>
+                  <span className="text-white text-lg font-medium">D</span>
                 </div>
                 <div>
-                  <p className="font-semibold text-secondary-900">
-                    {post.author.name}
-                  </p>
+                  <p className="font-semibold text-secondary-900">Dairium</p>
                   <p className="text-sm text-secondary-500">
-                    {formatDate(post.published_at)}
+                    {formatDate(post.publishedAt)}
                   </p>
                 </div>
               </div>
-              
+
               <div className="text-sm text-secondary-500">
-                {Math.ceil(post.content.length / 500)}분 읽기
+                {post.readingTime}분 읽기
               </div>
             </div>
 
             {/* 대표 이미지 */}
-            {post.featured_image && (
+            {post.featuredImage && (
               <div className="mb-8">
                 <img
-                  src={post.featured_image}
+                  src={post.featuredImage}
                   alt={post.title}
                   className="w-full h-64 lg:h-96 object-cover rounded-xl shadow-lg"
                 />
@@ -136,7 +148,7 @@ export default function BlogPost() {
 
             {/* 포스트 내용 */}
             <div className="prose prose-lg max-w-none">
-              <div 
+              <div
                 className="text-secondary-800 leading-relaxed"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
@@ -153,7 +165,9 @@ export default function BlogPost() {
                     <Link
                       key={tag}
                       to={`/tags/${tag}`}
-                      className={`px-3 py-1 text-sm font-medium rounded-full bg-secondary-100 text-secondary-700 hover:bg-secondary-200 transition-colors duration-200 ${getHighlightColor(index)}`}
+                      className={`px-3 py-1 text-sm font-medium rounded-full bg-secondary-100 text-secondary-700 hover:bg-secondary-200 transition-colors duration-200 ${getHighlightColor(
+                        index
+                      )}`}
                     >
                       #{tag}
                     </Link>
@@ -179,7 +193,11 @@ export default function BlogPost() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {relatedPosts.map((relatedPost: BlogPost, index: number) => (
-                  <div key={relatedPost.id} className="slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <div
+                    key={relatedPost.id}
+                    className="slide-up"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
                     <BlogCard post={relatedPost} />
                   </div>
                 ))}
@@ -192,16 +210,10 @@ export default function BlogPost() {
         <section className="py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between">
-              <Link
-                to="/blog"
-                className="btn-secondary px-6 py-3"
-              >
+              <Link to="/blog" className="btn-secondary px-6 py-3">
                 ← 블로그 목록으로
               </Link>
-              <Link
-                to="/"
-                className="btn-primary px-6 py-3"
-              >
+              <Link to="/" className="btn-primary px-6 py-3">
                 홈으로 →
               </Link>
             </div>

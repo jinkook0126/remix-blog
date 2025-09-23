@@ -1,4 +1,5 @@
 import { Link } from "@remix-run/react";
+import dayjs from "dayjs";
 import type { BlogPost } from "~/types";
 
 interface BlogCardProps {
@@ -7,7 +8,8 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ post, featured = false }: BlogCardProps) => {
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return "";
     return new Date(dateString).toLocaleDateString("ko-KR", {
       year: "numeric",
       month: "long",
@@ -29,14 +31,14 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
   return (
     <article className={`card-hover ${featured ? "lg:col-span-2" : ""}`}>
       {/* 이미지 */}
-      {post.featured_image && (
+      {post.featuredImage && (
         <div
           className={`mb-4 ${
             featured ? "h-64" : "h-48"
           } overflow-hidden rounded-lg`}
         >
           <img
-            src={post.featured_image}
+            src={post.featuredImage}
             alt={post.title}
             className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
           />
@@ -90,23 +92,19 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
           <div className="flex items-center space-x-3">
             {/* 작성자 아바타 */}
             <div className="w-8 h-8 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-medium">
-                {post.author.name.charAt(0).toUpperCase()}
-              </span>
+              <span className="text-white text-sm font-medium">D</span>
             </div>
             <div>
-              <p className="text-sm font-medium text-secondary-900">
-                {post.author.name}
-              </p>
+              <p className="text-sm font-medium text-secondary-900">Dairium</p>
               <p className="text-xs text-secondary-500">
-                {formatDate(post.published_at)}
+                {dayjs(post.publishedAt).format("YYYY년 MM월 DD일")}
               </p>
             </div>
           </div>
 
-          {/* 읽기 시간 (추정) */}
+          {/* 읽기 시간 */}
           <div className="text-xs text-secondary-500">
-            {Math.ceil(post.content.length / 500)}분 읽기
+            {post.readingTime}분 읽기
           </div>
         </div>
       </div>

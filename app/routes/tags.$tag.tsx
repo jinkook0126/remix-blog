@@ -1,6 +1,6 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, Link } from "@remix-run/react";
-import { getBlogPosts } from "~/lib/database";
+import { getPostsByTag } from "~/lib/database";
 import Navigation from "~/components/Navigation";
 import Footer from "~/components/Footer";
 import BlogCard from "~/components/BlogCard";
@@ -13,13 +13,9 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     throw new Response("Not Found", { status: 404 });
   }
 
-  // 실제 구현에서는 특정 태그로 필터링된 포스트를 가져와야 합니다
-  const allPosts = await getBlogPosts(50, 0);
-  const filteredPosts = allPosts.filter(
-    (post: BlogPost) => post.tags && post.tags.includes(tag)
-  );
+  const posts = await getPostsByTag(tag, 50, 0);
 
-  return json({ posts: filteredPosts, tag });
+  return json({ posts, tag });
 };
 
 export const meta = ({ data }: { data: { tag: string } }) => {

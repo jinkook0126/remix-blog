@@ -7,9 +7,9 @@ export interface BlogPost {
   content: string;
   excerpt: string;
   published: boolean;
-  publishedAt: Date | null;
-  createdAt: Date;
-  updatedAt: Date;
+  publishedAt: string | null; // Remix JSON 직렬화로 인해 string으로 변경
+  createdAt: string; // Remix JSON 직렬화로 인해 string으로 변경
+  updatedAt: string; // Remix JSON 직렬화로 인해 string으로 변경
   tags: string[];
   featuredImage: string | null;
   readingTime: number;
@@ -21,7 +21,7 @@ export interface Tag {
   slug: string;
   description: string | null;
   color: string;
-  createdAt: Date;
+  createdAt: string; // Remix JSON 직렬화로 인해 string으로 변경
 }
 
 // 블로그 포스트 생성/수정용 타입
@@ -31,7 +31,7 @@ export interface CreateBlogPost {
   content: string;
   excerpt: string;
   published?: boolean;
-  publishedAt?: Date | null;
+  publishedAt?: string | null; // Remix JSON 직렬화로 인해 string으로 변경
   tags?: string[];
   featuredImage?: string | null;
   readingTime?: number;
