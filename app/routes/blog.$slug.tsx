@@ -118,16 +118,8 @@ export default function BlogPost() {
 
             {/* 메타 정보 */}
             <div className="flex items-center justify-between py-6 border-t border-b border-secondary-200 mb-8">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-lg font-medium">D</span>
-                </div>
-                <div>
-                  <p className="font-semibold text-secondary-900">Dairium</p>
-                  <p className="text-sm text-secondary-500">
-                    {formatDate(post.publishedAt)}
-                  </p>
-                </div>
+              <div className="text-sm text-secondary-500">
+                {formatDate(post.publishedAt)}
               </div>
 
               <div className="text-sm text-secondary-500">

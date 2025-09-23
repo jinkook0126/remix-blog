@@ -29,8 +29,9 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
   };
 
   return (
-    <article
-      className={`card-hover flex flex-col h-full ${
+    <Link
+      to={`/blog/${post.slug}`}
+      className={`card-hover flex flex-col h-full block ${
         featured ? "lg:col-span-2" : ""
       }`}
     >
@@ -86,16 +87,11 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
 
         {/* 제목 */}
         <h2
-          className={`font-bold text-secondary-900 leading-tight ${
+          className={`font-bold text-secondary-900 leading-tight hover:text-primary-600 transition-colors duration-200 ${
             featured ? "text-2xl" : "text-xl"
           }`}
         >
-          <Link
-            to={`/blog/${post.slug}`}
-            className="hover:text-primary-600 transition-colors duration-200"
-          >
-            {post.title}
-          </Link>
+          {post.title}
         </h2>
 
         {/* 요약 */}
@@ -115,7 +111,7 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
           </div>
         </div>
       </div>
-    </article>
+    </Link>
   );
 };
 
