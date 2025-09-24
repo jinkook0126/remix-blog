@@ -11,19 +11,15 @@ const Footer = () => {
 
   const footerLinks: Record<string, FooterLink[]> = {
     블로그: [
-      { name: "최신 포스트", href: "/blog" },
-      { name: "인기 포스트", href: "/blog/popular" },
+      { name: "포스트", href: "/blog" },
       { name: "태그", href: "/tags" },
     ],
-    정보: [
-      { name: "소개", href: "/about" },
-      { name: "연락처", href: "/contact" },
-      { name: "개인정보처리방침", href: "/privacy" },
-    ],
     소셜: [
-      { name: "GitHub", href: "https://github.com", external: true },
-      { name: "Twitter", href: "https://twitter.com", external: true },
-      { name: "LinkedIn", href: "https://linkedin.com", external: true },
+      {
+        name: "threads",
+        href: "https://www.threads.com/@lee_starworld",
+        external: true,
+      },
     ],
   };
 
@@ -40,8 +36,7 @@ const Footer = () => {
               <span className="text-xl font-bold">Dairium</span>
             </Link>
             <p className="text-secondary-300 text-sm leading-relaxed">
-              현대적이고 눈이 편안한 블로그 플랫폼입니다. Remix와 Supabase로
-              구축되었습니다.
+              현대적이고 눈이 편안한 블로그 플랫폼
             </p>
           </div>
 

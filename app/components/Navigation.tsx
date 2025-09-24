@@ -8,7 +8,6 @@ const Navigation = () => {
     { name: "홈", href: "/" },
     { name: "블로그", href: "/blog" },
     { name: "태그", href: "/tags" },
-    { name: "소개", href: "/about" },
   ];
 
   return (
@@ -20,7 +19,9 @@ const Navigation = () => {
             <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">D</span>
             </div>
-            <span className="text-xl font-bold text-secondary-900">Dairium</span>
+            <span className="text-xl font-bold text-secondary-900">
+              Dairium
+            </span>
           </Link>
 
           {/* 데스크톱 네비게이션 */}

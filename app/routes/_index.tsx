@@ -53,8 +53,8 @@ export default function Index() {
                 <Link to="/blog" className="btn-primary px-8 py-3 text-lg">
                   블로그 둘러보기
                 </Link>
-                <Link to="/about" className="btn-secondary px-8 py-3 text-lg">
-                  더 알아보기
+                <Link to="/tags" className="btn-secondary px-8 py-3 text-lg">
+                  태그 둘러보기
                 </Link>
               </div>
             </div>
@@ -202,16 +202,16 @@ export default function Index() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                     />
                   </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-secondary-900 mb-2">
-                  빠른 성능
+                  읽기 편의성
                 </h3>
                 <p className="text-secondary-600">
-                  Remix와 Supabase의 강력한 조합으로 빠르고 안정적인 성능을
-                  보장합니다.
+                  명확한 구조와 적절한 여백으로 읽기 편한 글을 제공하여 독자의
+                  이해도를 높입니다.
                 </p>
               </div>
             </div>
