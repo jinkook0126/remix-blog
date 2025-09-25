@@ -2,10 +2,6 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* 네이버 나눔스퀘어 나노 폰트 */
-@import url("https://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css");
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
-
 /* 기본 스타일 */
 @layer base {
   html {

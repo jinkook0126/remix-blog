@@ -14,8 +14,8 @@
 
 - **프론트엔드**: Remix, React, TypeScript
 - **스타일링**: Tailwind CSS
-- **데이터베이스**: Supabase (PostgreSQL)
-- **인증**: Supabase Auth
+- **데이터베이스**: Prisma + PostgreSQL
+- **ORM**: Prisma
 - **코드 품질**: ESLint (Airbnb 설정)
 
 ## 📦 설치 및 실행
@@ -38,18 +38,26 @@ npm install
 `.env` 파일을 생성하고 다음 변수들을 설정하세요:
 
 ```env
-SUPABASE_URL=your_supabase_url_here
-SUPABASE_ANON_KEY=your_supabase_anon_key_here
+DATABASE_URL="postgresql://username:password@localhost:5432/dairium_blog"
 SITE_URL=https://dairium-blog.com
 SITE_NAME=Dairium Blog
-SITE_DESCRIPTION=A modern blog built with Remix and Supabase
+SITE_DESCRIPTION=A modern blog built with Remix and Prisma
 ```
 
-### 4. Supabase 설정
+### 4. 데이터베이스 설정
 
-1. [Supabase](https://supabase.com)에서 새 프로젝트를 생성하세요.
-2. `supabase-schema.sql` 파일의 내용을 Supabase SQL 에디터에서 실행하세요.
-3. 환경 변수에 Supabase URL과 Anon Key를 설정하세요.
+1. PostgreSQL 데이터베이스를 설정하세요.
+2. Prisma 마이그레이션을 실행하세요:
+
+```bash
+npx prisma migrate dev
+```
+
+3. 시드 데이터를 추가하세요:
+
+```bash
+npm run db:seed
+```
 
 ### 5. 개발 서버 실행
 
@@ -84,16 +92,23 @@ dairium-blog/
 │   │   ├── Footer.tsx
 │   │   └── BlogCard.tsx
 │   ├── lib/                 # 유틸리티 및 설정
-│   │   └── supabase.ts
+│   │   └── database.ts
 │   ├── routes/              # 페이지 라우트
 │   │   ├── _index.tsx       # 홈페이지
 │   │   ├── blog._index.tsx  # 블로그 목록
 │   │   ├── blog.$slug.tsx   # 개별 포스트
-│   │   └── about.tsx        # 소개 페이지
+│   │   ├── tags._index.tsx  # 태그 목록
+│   │   └── tags.$tag.tsx    # 태그별 포스트
 │   ├── styles/              # 스타일 파일
 │   │   └── globals.css
+│   ├── types/               # TypeScript 타입 정의
+│   │   ├── blog.ts
+│   │   └── index.ts
 │   └── root.tsx             # 루트 컴포넌트
-├── supabase-schema.sql      # 데이터베이스 스키마
+├── prisma/                  # Prisma 스키마
+│   └── schema.prisma
+├── scripts/                 # 유틸리티 스크립트
+│   └── seed.ts
 └── README.md
 ```
 
@@ -108,6 +123,7 @@ dairium-blog/
 ### 기타 플랫폼
 
 Remix는 다양한 플랫폼에서 배포할 수 있습니다:
+
 - Netlify
 - Railway
 - Fly.io
@@ -115,7 +131,7 @@ Remix는 다양한 플랫폼에서 배포할 수 있습니다:
 
 ## 📝 블로그 포스트 작성
 
-Supabase 대시보드에서 `blog_posts` 테이블에 직접 데이터를 추가하거나, 관리자 인터페이스를 구축할 수 있습니다.
+Prisma를 통해 데이터베이스에 직접 데이터를 추가하거나, 관리자 인터페이스를 구축할 수 있습니다.
 
 ### 필수 필드
 
@@ -124,9 +140,19 @@ Supabase 대시보드에서 `blog_posts` 테이블에 직접 데이터를 추가
 - `content`: HTML 형태의 포스트 내용
 - `excerpt`: 포스트 요약
 - `published`: 발행 여부 (boolean)
-- `published_at`: 발행 날짜
-- `author_id`: 작성자 ID
+- `publishedAt`: 발행 날짜
+- `authorId`: 작성자 ID
 - `tags`: 태그 배열
+
+### 데이터베이스 관리
+
+```bash
+# 데이터베이스 리셋 및 시드
+npm run db:reset
+
+# 시드 데이터만 추가
+npm run db:seed
+```
 
 ## 🔧 개발
 
@@ -163,4 +189,4 @@ MIT License
 
 ---
 
-Made with ❤️ using Remix & Supabase
+Made with ❤️ using Remix & Prisma
