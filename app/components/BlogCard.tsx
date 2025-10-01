@@ -8,15 +8,6 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ post, featured = false }: BlogCardProps) => {
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
   const getHighlightColor = (index: number) => {
     const colors = [
       "highlight-blue",

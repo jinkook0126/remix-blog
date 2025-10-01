@@ -1,10 +1,12 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData, Link } from "@remix-run/react";
+import { useLoaderData, Link, useLocation } from "@remix-run/react";
 import { getBlogPostBySlug, getRelatedPosts } from "~/lib/database";
 import Navigation from "~/components/Navigation";
 import Footer from "~/components/Footer";
 import BlogCard from "~/components/BlogCard";
 import type { BlogPost } from "~/types";
+import dayjs from "dayjs";
+import { useEffect } from "react";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { slug } = params;
@@ -61,16 +63,7 @@ export const meta = ({ data }: { data: { post: BlogPost } }) => {
 
 export default function BlogPost() {
   const { post, relatedPosts } = useLoaderData<typeof loader>();
-
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
+  const location = useLocation();
   const getHighlightColor = (index: number) => {
     const colors = [
       "highlight-blue",
@@ -81,7 +74,9 @@ export default function BlogPost() {
     ];
     return colors[index % colors.length];
   };
-
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location.pathname]);
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -119,7 +114,7 @@ export default function BlogPost() {
             {/* 메타 정보 */}
             <div className="flex items-center justify-between py-6 border-t border-b border-secondary-200 mb-8">
               <div className="text-sm text-secondary-500">
-                {formatDate(post.publishedAt)}
+                {dayjs(post.publishedAt).format("YYYY년 MM월 DD일")}
               </div>
 
               <div className="text-sm text-secondary-500">

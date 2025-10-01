@@ -4,6 +4,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "@remix-run/react";
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import "~/styles/globals.css";
@@ -45,6 +46,8 @@ export const meta: MetaFunction = () => [
 ];
 
 export default function App() {
+  const location = useLocation();
+  const isBlogPost = location.pathname.startsWith("/blog/");
   return (
     <html lang="ko" className="h-full">
       <head>
@@ -55,7 +58,7 @@ export default function App() {
       </head>
       <body className="h-full bg-secondary-50">
         <Outlet />
-        <ScrollRestoration />
+        {!isBlogPost && <ScrollRestoration />}
         <Scripts />
       </body>
     </html>
