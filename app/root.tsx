@@ -8,40 +8,44 @@ import {
 } from "@remix-run/react";
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import "~/styles/globals.css";
+import faviconList from "./lib/faviconList";
 
 export const links: LinksFunction = () => [
   {
     rel: "stylesheet",
     href: "https://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css",
   },
+  ...faviconList,
 ];
 
 export const meta: MetaFunction = () => [
-  { title: "Dairium Blog - Modern Blog Platform" },
+  { title: "Dairium - Modern Blog Platform" },
   {
     name: "description",
     content:
-      "A modern blog built with Remix and Supabase featuring eye-friendly design and responsive layout.",
+      "현대적이고 눈이 편안한 디자인으로 제작된 블로그에서 흥미로운 이야기와 유용한 정보를 만나보세요",
   },
   { name: "viewport", content: "width=device-width, initial-scale=1" },
   { name: "theme-color", content: "#0ea5e9" },
-  { property: "og:title", content: "Dairium Blog" },
+  { property: "og:title", content: "Dairium" },
   {
     property: "og:description",
-    content: "A modern blog built with Remix and Supabase",
+    content:
+      "현대적이고 편안한 디자인 속에서 흥미로운 이야기와 유용한 정보를 전합니다.",
   },
   { property: "og:type", content: "website" },
-  { property: "og:url", content: "https://dairium-blog.com" },
-  { property: "og:image", content: "https://dairium-blog.com/og-image.jpg" },
+  { property: "og:url", content: "https://dairium.com" },
+  { property: "og:image", content: "https://dairium.com/og-image.jpg" },
   { property: "twitter:card", content: "summary_large_image" },
-  { property: "twitter:title", content: "Dairium Blog" },
+  { property: "twitter:title", content: "Dairium" },
   {
     property: "twitter:description",
-    content: "A modern blog built with Remix and Supabase",
+    content:
+      "현대적이고 편안한 디자인 속에서 흥미로운 이야기와 유용한 정보를 전합니다.",
   },
   {
     property: "twitter:image",
-    content: "https://dairium-blog.com/og-image.jpg",
+    content: "https://dairium.com/og-image.jpg",
   },
 ];
 
