@@ -61,7 +61,7 @@ export const getBlogPostBySlug = async (
 };
 
 export const getRelatedPosts = async (
-  currentPostId: string,
+  currentPostId: number,
   tags: string[],
   limit = 3
 ): Promise<BlogPost[]> => {

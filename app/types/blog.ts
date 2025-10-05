@@ -1,7 +1,7 @@
 // 블로그 관련 타입 정의
 
 export interface BlogPost {
-  id: string;
+  id: number;
   title: string;
   slug: string;
   content: string;
@@ -16,7 +16,7 @@ export interface BlogPost {
 }
 
 export interface Tag {
-  id: string;
+  id: number;
   name: string;
   slug: string;
   description: string | null;
@@ -38,7 +38,7 @@ export interface CreateBlogPost {
 }
 
 export interface UpdateBlogPost extends Partial<CreateBlogPost> {
-  id: string;
+  id: number;
 }
 
 // 태그 생성/수정용 타입
@@ -50,7 +50,7 @@ export interface CreateTag {
 }
 
 export interface UpdateTag extends Partial<CreateTag> {
-  id: string;
+  id: number;
 }
 
 // API 응답 타입
