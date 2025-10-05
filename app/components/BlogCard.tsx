@@ -1,6 +1,12 @@
 import { Link } from "@remix-run/react";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import "dayjs/locale/ko";
 import type { BlogPost } from "~/types";
+
+// dayjs 플러그인 및 로케일 설정
+dayjs.extend(utc);
+dayjs.locale("ko");
 
 interface BlogCardProps {
   post: BlogPost;
@@ -22,7 +28,7 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
   return (
     <Link
       to={`/blog/${post.slug}`}
-      className={`card-hover flex flex-col h-full block ${
+      className={`card-hover flex flex-col h-full ${
         featured ? "lg:col-span-2" : ""
       }`}
     >
@@ -93,7 +99,9 @@ const BlogCard = ({ post, featured = false }: BlogCardProps) => {
         {/* 메타 정보 - 카드 하단에 고정 */}
         <div className="flex items-center justify-between pt-2 mt-auto">
           <div className="text-xs text-secondary-500">
-            {dayjs(post.publishedAt).format("YYYY년 MM월 DD일")}
+            {post.publishedAt
+              ? dayjs.utc(post.publishedAt).format("YYYY년 MM월 DD일")
+              : "날짜 미정"}
           </div>
 
           {/* 읽기 시간 */}

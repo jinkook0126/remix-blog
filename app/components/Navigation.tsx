@@ -1,8 +1,13 @@
 import { Link } from "@remix-run/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   const navigationItems = [
     { name: "홈", href: "/" },
@@ -50,7 +55,7 @@ const Navigation = () => {
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              {isMenuOpen ? (
+              {isHydrated && isMenuOpen ? (
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -70,7 +75,7 @@ const Navigation = () => {
         </div>
 
         {/* 모바일 메뉴 */}
-        {isMenuOpen && (
+        {isHydrated && isMenuOpen && (
           <div className="md:hidden border-t border-secondary-200 py-4">
             <div className="flex flex-col space-y-4">
               {navigationItems.map((item) => (

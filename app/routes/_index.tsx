@@ -1,5 +1,6 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, Link } from "@remix-run/react";
+import { useState, useEffect } from "react";
 import { getBlogPosts } from "~/lib/database";
 import Navigation from "~/components/Navigation";
 import Footer from "~/components/Footer";
@@ -28,6 +29,11 @@ export const meta = () => [
 
 export default function Index() {
   const { posts } = useLoaderData<typeof loader>();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -79,7 +85,9 @@ export default function Index() {
                   <div
                     key={post.id}
                     className="slide-up"
-                    style={{ animationDelay: `${index * 0.1}s` }}
+                    style={
+                      isHydrated ? { animationDelay: `${index * 0.1}s` } : {}
+                    }
                   >
                     <BlogCard post={post} featured={index === 0} />
                   </div>

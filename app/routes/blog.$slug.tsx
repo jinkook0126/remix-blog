@@ -6,7 +6,13 @@ import Footer from "~/components/Footer";
 import BlogCard from "~/components/BlogCard";
 import type { BlogPost } from "~/types";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import "dayjs/locale/ko";
 import { useEffect } from "react";
+
+// dayjs 플러그인 및 로케일 설정
+dayjs.extend(utc);
+dayjs.locale("ko");
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { slug } = params;
@@ -114,7 +120,9 @@ export default function BlogPost() {
             {/* 메타 정보 */}
             <div className="flex items-center justify-between py-6 border-t border-b border-secondary-200 mb-8">
               <div className="text-sm text-secondary-500">
-                {dayjs(post.publishedAt).format("YYYY년 MM월 DD일")}
+                {post.publishedAt
+                  ? dayjs.utc(post.publishedAt).format("YYYY년 MM월 DD일")
+                  : "날짜 미정"}
               </div>
 
               <div className="text-sm text-secondary-500">
