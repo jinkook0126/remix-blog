@@ -98,22 +98,40 @@ export const getRelatedPosts = async (
 // 태그 관련 함수들
 export const getAllTags = async (): Promise<Tag[]> => {
   try {
-    const tags = await prisma.tag.findMany({
-      orderBy: {
-        name: "asc",
-      },
+    // 모든 게시글의 태그를 가져와서 중복 제거
+    const posts = await prisma.blogPost.findMany({
+      where: { published: true },
+      select: { tags: true },
     });
 
-    // Date 객체를 문자열로 변환하여 JSON 직렬화 가능하게 만듦
-    return tags.map((tag) => ({
-      ...tag,
-      createdAt: tag.createdAt.toISOString(),
+    // 모든 태그를 평탄화하고 중복 제거
+    const allTags = posts.flatMap((post) => post.tags);
+    const uniqueTags = [...new Set(allTags)];
+
+    // Tag 타입에 맞게 변환
+    return uniqueTags.sort().map((tagName, index) => ({
+      id: index + 1, // 임시 ID
+      name: tagName,
+      slug: tagName,
+      description: `${tagName} 관련 포스트`,
+      color: getTagColorFromName(tagName),
+      createdAt: new Date().toISOString(),
     }));
   } catch (error) {
     console.error("Error fetching tags:", error);
     return [];
   }
 };
+
+// 태그 이름을 기반으로 일관된 색상 반환
+function getTagColorFromName(tagName: string): string {
+  const colors = ["#3b82f6", "#10b981", "#8b5cf6", "#f59e0b", "#ec4899"];
+  let hash = 0;
+  for (let i = 0; i < tagName.length; i++) {
+    hash = tagName.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
+}
 
 export const getPostsByTag = async (
   tagSlug: string,

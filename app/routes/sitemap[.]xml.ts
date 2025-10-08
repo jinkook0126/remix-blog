@@ -16,6 +16,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       where: { published: true },
       select: {
         slug: true,
+        tags: true,
         updatedAt: true,
         publishedAt: true,
       },
@@ -25,17 +26,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
     console.log("Found posts:", posts.length);
 
-    // 3️⃣ 태그 목록 불러오기
+    // 3️⃣ 태그 목록 불러오기 (게시글의 태그들을 중복 제거)
     console.log("Fetching tags...");
-    const tags = await prisma.tag.findMany({
-      select: {
-        slug: true,
-        createdAt: true,
-      },
-      orderBy: {
-        name: "asc",
-      },
-    });
+    const allTags = posts.flatMap((post) => post.tags);
+    const uniqueTags = [...new Set(allTags)].sort();
+    const tags = uniqueTags.map((tag) => ({
+      slug: tag,
+      createdAt: new Date(),
+    }));
     console.log("Found tags:", tags.length);
 
     // 4️⃣ XML 생성
