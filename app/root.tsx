@@ -27,6 +27,7 @@ export const meta: MetaFunction = () => [
   },
   { name: "viewport", content: "width=device-width, initial-scale=1" },
   { name: "theme-color", content: "#0ea5e9" },
+  { name: "google-adsense-account", content: "ca-pub-3023499308009046" },
   { property: "og:title", content: "Dairium" },
   {
     property: "og:description",
