@@ -15,6 +15,12 @@ export const links: LinksFunction = () => [
     rel: "stylesheet",
     href: "https://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css",
   },
+  {
+    rel: "alternate",
+    type: "application/rss+xml",
+    title: "다이어리움 RSS Feed",
+    href: "https://dairium.com/feed.xml",
+  },
   ...faviconList,
 ];
 

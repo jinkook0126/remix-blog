@@ -1,63 +1,35 @@
+// app/routes/robots.txt.ts
 import type { LoaderFunctionArgs } from "@remix-run/node";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  console.log("🤖 Robots.txt loader called for:", request.url);
   const baseUrl = process.env.SITE_URL ?? new URL(request.url).origin;
-  console.log("Base URL:", baseUrl);
 
   const content = `User-agent: *
+# ✅ 기본은 허용
 Allow: /
 
-# 허용할 주요 경로들 (블로그 콘텐츠)
+# ✅ 주요 공개 경로(명시적 허용은 선택 사항)
 Allow: /blog/
 Allow: /tags/
+Allow: /feed.xml
 Allow: /sitemap.xml
-Allow: /robots.txt
 
-# 검색엔진이 크롤링하지 않아야 할 경로
+# ❌ 내부/비공개 경로만 최소 차단
 Disallow: /api/
 Disallow: /admin/
 Disallow: /private/
 Disallow: /draft/
-Disallow: /build/
-Disallow: /node_modules/
-Disallow: /.env
-Disallow: /.env.local
-Disallow: /scripts/
-Disallow: /prisma/
 
-# 특정 파일 형식 제한
-Disallow: /*.json$
-Disallow: /*.log$
-Disallow: /*.sql$
-Disallow: /*.md$
-Disallow: /*.ts$
-Disallow: /*.js$
-Disallow: /*.config.js$
-Disallow: /*.config.ts$
+# ❗ JS/CSS/이미지/빌드 자산은 차단하지 마세요 (렌더링 필수)
+# Disallow: /*.js$   <-- 절대 사용 금지
+# Disallow: /build/  <-- 자산 차단 금지
 
-# 개발 및 빌드 관련 파일들
-Disallow: /vite.config.ts
-Disallow: /tailwind.config.js
-Disallow: /postcss.config.js
-Disallow: /tsconfig.json
-Disallow: /package.json
-Disallow: /package-lock.json
+# ℹ️ Google은 crawl-delay를 무시합니다. (Bing만 부분 지원)
+# Crawl-delay: 1
 
-# 사이트맵 위치 명시
+# 🔗 사이트맵 위치(분할 시 여러 줄 기재 가능)
 Sitemap: ${baseUrl}/sitemap.xml
-
-# 크롤링 지연 (서버 부하 방지)
-Crawl-delay: 1
-
-# 특별한 크롤러 설정 (선택사항)
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 1
-
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 2`.trim();
+`.trim();
 
   return new Response(content, {
     headers: {
