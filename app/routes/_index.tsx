@@ -13,17 +13,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const meta = () => [
-  { title: "Dairium Blog - 현대적인 블로그 플랫폼" },
+  { title: "다이어리움 - 다양한 소식과 지식을 전하는 블로그" },
   {
     name: "description",
-    content:
-      "눈이 편안한 디자인과 반응형 레이아웃을 갖춘 현대적인 블로그 플랫폼입니다.",
+    content: "다양한 소식과 지식을 전하는 블로그입니다.",
   },
-  { property: "og:title", content: "Dairium Blog" },
+  { property: "og:title", content: "다이어리움" },
   {
     property: "og:description",
-    content:
-      "눈이 편안한 디자인과 반응형 레이아웃을 갖춘 현대적인 블로그 플랫폼입니다.",
+    content: "다양한 소식과 지식을 전하는 블로그입니다.",
   },
 ];
 
