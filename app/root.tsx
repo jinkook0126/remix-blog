@@ -63,6 +63,11 @@ export default function App() {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3023499308009046"
+          crossOrigin="anonymous"
+        ></script>
         <Meta />
         <Links />
       </head>
