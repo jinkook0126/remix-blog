@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import OpenAI from "openai";
 import { PrismaClient } from "@prisma/client";
+import { templateAsText } from "~/prompt/relationship/relationship-psychology-template";
 
 interface AutoPostRequestBody {
   title: string;
@@ -42,25 +43,50 @@ export const action = async ({
         process.cwd(),
         "app",
         "prompt",
-        "relationship-psychology.md"
+        "relationship",
+        "relationship-psychology-template.ts"
       );
       const systemPrompt = await readFile(promptPath, "utf-8");
 
       console.log("System Prompt 로드 완료");
+      const response = await fetch(
+        "http://psytimes.co.kr/news/view.php?idx=11630"
+      )
+        .then((res) => {
+          return res.text();
+        })
+        .catch((err) => {
+          console.error(err);
+          return "";
+        });
 
+      const userContent = `
+        당신은 위 system 지침과 JSON 템플릿을 따라서만 응답해야 합니다.
+        아래 제공하는 원문 HTML을 기반으로, 반드시 JSON 하나만 출력하세요.
+        
+        [원문 URL]
+        ${body.url ?? ""}
+        
+        [원문 HTML]
+        ${response}
+        `.trim();
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4.1",
         messages: [
           {
             role: "system",
             content: systemPrompt,
           },
           {
+            role: "assistant",
+            content: templateAsText,
+          },
+          {
             role: "user",
-            content: `${body.title}에 대해 간단히 설명해주세요.`,
+            content: userContent,
           },
         ],
-        max_tokens: 500,
+        max_tokens: 2500,
       });
 
       const chatResponse =
