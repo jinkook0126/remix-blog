@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import OpenAI from "openai";
 import { PrismaClient } from "@prisma/client";
+import * as cheerio from "cheerio";
 import { templateAsText } from "~/prompt/relationship/relationship-psychology-template";
 
 interface AutoPostRequestBody {
@@ -35,7 +36,6 @@ export const action = async ({
 
     // OpenAI ChatGPT를 통한 검색 테스트
     console.log("=== ChatGPT 연동 테스트 시작 ===");
-    console.log("검색 키워드 (title):", body.title);
 
     try {
       // relationship-psychology.md 파일 읽기
@@ -44,7 +44,7 @@ export const action = async ({
         "app",
         "prompt",
         "relationship",
-        "relationship-psychology-template.ts"
+        "relationship-psychology.md"
       );
       const systemPrompt = await readFile(promptPath, "utf-8");
 
@@ -60,15 +60,19 @@ export const action = async ({
           return "";
         });
 
+      const $ = cheerio.load(response);
+      const mainText = $("body").text().trim();
+
       const userContent = `
         당신은 위 system 지침과 JSON 템플릿을 따라서만 응답해야 합니다.
-        아래 제공하는 원문 HTML을 기반으로, 반드시 JSON 하나만 출력하세요.
+        아래 [원문 HTML]은 텍스트 내용만 참고하고, HTML 태그/클래스/이미지는 절대 재사용하지 마세요.
+        **최종 html 필드는 오직 system 지침에 정의된 태그와 클래스만 사용해서 새로 구성하여 json 형식으로 출력하세요.**
         
         [원문 URL]
         ${body.url ?? ""}
         
         [원문 HTML]
-        ${response}
+        ${mainText}
         `.trim();
       const completion = await openai.chat.completions.create({
         model: "gpt-4.1",
