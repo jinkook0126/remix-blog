@@ -76,7 +76,7 @@ export const action = async ({
     const body: AutoPostRequestBody = await request.json();
 
     if (!body.title || !body.url || !body.html) {
-      return Response.json({ success: false }, { status: 400 });
+      throw new Error("요청 본문에 필수 필드가 없습니다.");
     }
 
     const $ = cheerio.load(body.html);
@@ -117,7 +117,7 @@ export const action = async ({
     const finishReason = completion.choices[0]?.finish_reason;
 
     if (!chatResponse || finishReason === "stop") {
-      return Response.json({ success: false }, { status: 200 });
+      throw new Error(`GPT 응답에 실패했습니다. : ${finishReason}`);
     }
 
     const parsedResponse: GptResponse = parseJsonResponse(chatResponse);
@@ -169,6 +169,7 @@ export const action = async ({
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
     return Response.json({ success: false, error: error });
   }
 };
