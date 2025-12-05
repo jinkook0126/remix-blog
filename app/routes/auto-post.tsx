@@ -1,12 +1,12 @@
 import { type ActionFunctionArgs } from "@remix-run/node";
 import { createClient } from "@supabase/supabase-js";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 import { randomUUID } from "node:crypto";
 import OpenAI from "openai";
 import { PrismaClient } from "@prisma/client";
 import * as cheerio from "cheerio";
 import { templateAsText } from "~/prompt/relationship/relationship-psychology-template";
+import relationshipPsychologyPrompt from "~/prompt/relationship/relationship-psychology.md?raw";
+import relationshipPsychologyImagePrompt from "~/prompt/relationship/relationship-psychology-image.md?raw";
 import dayjs from "dayjs";
 
 interface AutoPostRequestBody {
@@ -79,15 +79,6 @@ export const action = async ({
       return Response.json({ success: false }, { status: 400 });
     }
 
-    const promptPath = join(
-      process.cwd(),
-      "app",
-      "prompt",
-      "relationship",
-      "relationship-psychology.md"
-    );
-    const systemPrompt = await readFile(promptPath, "utf-8");
-
     const $ = cheerio.load(body.html);
     const mainText = $("body").text().trim();
 
@@ -108,7 +99,7 @@ export const action = async ({
       messages: [
         {
           role: "system",
-          content: systemPrompt,
+          content: relationshipPsychologyPrompt,
         },
         {
           role: "assistant",
@@ -131,18 +122,9 @@ export const action = async ({
 
     const parsedResponse: GptResponse = parseJsonResponse(chatResponse);
 
-    const imagePromptPath = join(
-      process.cwd(),
-      "app",
-      "prompt",
-      "relationship",
-      "relationship-psychology-image.md"
-    );
-    const imageSystemPrompt = await readFile(imagePromptPath, "utf-8");
-
     const imageResponse = await openai.images.generate({
       model: "dall-e-3",
-      prompt: `${imageSystemPrompt}\n\n제목 : ${
+      prompt: `${relationshipPsychologyImagePrompt}\n\n제목 : ${
         parsedResponse.title
       }\n\n태그 : ${parsedResponse.tags?.join(", ")}\n\n메타설명 : ${
         parsedResponse.metaDescription
@@ -187,6 +169,6 @@ export const action = async ({
       { status: 200 }
     );
   } catch (error) {
-    return Response.json({ success: false, error: error }, { status: 500 });
+    return Response.json({ success: false, error: error });
   }
 };
