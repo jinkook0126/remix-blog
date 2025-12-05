@@ -119,8 +119,10 @@ export const action = async ({
     if (!chatResponse || finishReason === "stop") {
       throw new Error(`GPT 응답에 실패했습니다. : ${finishReason}`);
     }
-
+    console.log("=== completion ===");
+    console.log(completion);
     console.log("=== chatResponse ===");
+    console.log(chatResponse.length);
     console.log(chatResponse);
 
     const parsedResponse: GptResponse = parseJsonResponse(chatResponse);
