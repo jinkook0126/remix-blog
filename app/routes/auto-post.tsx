@@ -7,7 +7,6 @@ import * as cheerio from "cheerio";
 import { templateAsText } from "~/prompt/relationship/relationship-psychology-template";
 import relationshipPsychologyPrompt from "~/prompt/relationship/relationship-psychology.md?raw";
 import relationshipPsychologyImagePrompt from "~/prompt/relationship/relationship-psychology-image.md?raw";
-import dayjs from "dayjs";
 
 interface AutoPostRequestBody {
   title: string;
@@ -93,7 +92,6 @@ export const action = async ({
       [원문 HTML]
       ${mainText}
     `.trim();
-
     const completion = await openai.chat.completions.create({
       model: "gpt-4.1",
       messages: [
@@ -110,7 +108,8 @@ export const action = async ({
           content: userContent,
         },
       ],
-      max_tokens: 3500,
+      max_tokens: 4500,
+      temperature: 0.7,
     });
 
     const chatResponse = completion.choices[0]?.message?.content;
@@ -119,10 +118,8 @@ export const action = async ({
     if (!chatResponse || finishReason === "stop") {
       throw new Error(`GPT 응답에 실패했습니다. : ${finishReason}`);
     }
-    console.log("=== completion ===");
-    console.log(completion);
+
     console.log("=== chatResponse ===");
-    console.log(chatResponse.length);
     console.log(chatResponse);
 
     const parsedResponse: GptResponse = parseJsonResponse(chatResponse);
@@ -164,9 +161,9 @@ export const action = async ({
         featuredImage: publicUrl,
         readingTime: parsedResponse.readTimeMinutes,
         thread: parsedResponse.threadSummary,
-        publishedAt: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-        createdAt: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-        updatedAt: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+        publishedAt: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     });
 
