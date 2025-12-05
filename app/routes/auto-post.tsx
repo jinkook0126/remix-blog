@@ -120,7 +120,13 @@ export const action = async ({
       throw new Error(`GPT 응답에 실패했습니다. : ${finishReason}`);
     }
 
+    console.log("=== chatResponse ===");
+    console.log(chatResponse);
+
     const parsedResponse: GptResponse = parseJsonResponse(chatResponse);
+
+    console.log("=== parsedResponse ===");
+    console.log(parsedResponse.title);
 
     const imageResponse = await openai.images.generate({
       model: "dall-e-3",
@@ -141,6 +147,9 @@ export const action = async ({
     }
 
     const publicUrl = await uploadImageToStorage(base64Image);
+
+    console.log("=== publicUrl ===");
+    console.log(publicUrl);
 
     await prisma.blogPost.create({
       data: {
