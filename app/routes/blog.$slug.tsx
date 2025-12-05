@@ -108,7 +108,7 @@ export default function BlogPost() {
             )}
 
             {/* 제목 */}
-            <h1 className="text-4xl lg:text-5xl font-bold text-secondary-900 mb-6 leading-tight">
+            <h1 className="text-4xl lg:text-5xl lg:leading-snug font-bold text-secondary-900 mb-6">
               {post.title}
             </h1>
 

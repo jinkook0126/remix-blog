@@ -21,6 +21,7 @@ model BlogPost {
   tags          String[]
   featuredImage String?   @map("featured_image")
   readingTime   Int       @default(0) @map("reading_time")
+  thread        String?   @default("")
 
   @@index([published, publishedAt(sort: Desc)])
   @@index([slug])
