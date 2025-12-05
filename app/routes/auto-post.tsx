@@ -78,8 +78,8 @@ export const action = async ({
     if (!body.title || !body.url || !body.html) {
       throw new Error("요청 본문에 필수 필드가 없습니다.");
     }
-
-    const $ = cheerio.load(body.html);
+    const htmlDecoded = Buffer.from(body.html, "base64").toString("utf8");
+    const $ = cheerio.load(htmlDecoded);
     const mainText = $("body").text().trim();
 
     const userContent = `
