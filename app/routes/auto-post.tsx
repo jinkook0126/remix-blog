@@ -59,7 +59,7 @@ const uploadImageToStorage = async (base64Image: string) => {
 
   const {
     data: { publicUrl },
-  } = supabase.storage.from("images").getPublicUrl(filePath);
+  } = supabase.storage.from("image").getPublicUrl(filePath);
 
   return publicUrl;
 };
@@ -178,6 +178,9 @@ export const action = async ({
     );
   } catch (error) {
     console.log(error);
-    return Response.json({ success: false, error: error });
+    if (error instanceof Error) {
+      return Response.json({ success: false, error: error.message });
+    }
+    return Response.json({ success: false, error });
   }
 };
