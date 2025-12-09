@@ -115,7 +115,7 @@ export const action = async ({
     const chatResponse = completion.choices[0]?.message?.content;
     const finishReason = completion.choices[0]?.finish_reason;
 
-    if (!chatResponse || finishReason === "stop") {
+    if (!chatResponse) {
       throw new Error(`GPT 응답에 실패했습니다. : ${finishReason}`);
     }
 
