@@ -4,9 +4,10 @@ import { randomUUID } from "node:crypto";
 import OpenAI from "openai";
 import { PrismaClient } from "@prisma/client";
 import * as cheerio from "cheerio";
-import { templateAsText } from "~/prompt/relationship/relationship-psychology-template";
 import relationshipPsychologyPrompt from "~/prompt/relationship/relationship-psychology.md?raw";
 import relationshipPsychologyImagePrompt from "~/prompt/relationship/relationship-psychology-image.md?raw";
+import relationshipPsychologySummationPrompt from "~/prompt/relationship/relationship-psychology-summation.md?raw";
+import { createSummationPrompt } from "~/prompt/relationship/relationship-psychology-summation-user-prompt";
 
 interface AutoPostRequestBody {
   title: string;
@@ -81,27 +82,36 @@ export const action = async ({
     const $ = cheerio.load(htmlDecoded);
     const mainText = $("body").text().trim();
 
+    const summationPrompt = createSummationPrompt(mainText);
+    const summationCompletion = await openai.chat.completions.create({
+      model: "gpt-4.1-mini",
+      messages: [
+        {
+          role: "system",
+          content: relationshipPsychologySummationPrompt,
+        },
+        {
+          role: "user",
+          content: summationPrompt,
+        },
+      ],
+      max_tokens: 800,
+      temperature: 0.2,
+    });
+
     const userContent = `
-      당신은 위 system 지침과 JSON 템플릿을 따라서만 응답해야 합니다.
-      아래 [원문 HTML]은 텍스트 내용만 참고하고, HTML 태그/클래스/이미지는 절대 재사용하지 마세요.
-      **최종 html 필드는 오직 system 지침에 정의된 태그와 클래스만 사용해서 새로 구성하여 json 형식으로 출력하세요.**
-      
-      [원문 URL]
-      ${body.url ?? ""}
-      
-      [원문 HTML]
-      ${mainText}
-    `.trim();
+    당신은 위 system 지침과 JSON 템플릿을 따라서만 응답해야 합니다.
+    **최종 html 필드는 오직 system 지침에 정의된 태그와 클래스만 사용해서 새로 구성하여 json 형식으로 출력하세요.**
+    
+    [요약본]
+    ${summationCompletion.choices[0]?.message?.content}
+  `.trim();
     const completion = await openai.chat.completions.create({
       model: "gpt-4.1",
       messages: [
         {
           role: "system",
           content: relationshipPsychologyPrompt,
-        },
-        {
-          role: "assistant",
-          content: templateAsText,
         },
         {
           role: "user",
@@ -119,13 +129,7 @@ export const action = async ({
       throw new Error(`GPT 응답에 실패했습니다. : ${finishReason}`);
     }
 
-    console.log("=== chatResponse ===");
-    console.log(chatResponse);
-
     const parsedResponse: GptResponse = parseJsonResponse(chatResponse);
-
-    console.log("=== parsedResponse ===");
-    console.log(parsedResponse.title);
 
     const imageResponse = await openai.images.generate({
       model: "dall-e-3",
@@ -147,16 +151,13 @@ export const action = async ({
 
     const publicUrl = await uploadImageToStorage(base64Image);
 
-    console.log("=== publicUrl ===");
-    console.log(publicUrl);
-
     await prisma.blogPost.create({
       data: {
         title: parsedResponse.title,
         slug: parsedResponse.slug,
         content: parsedResponse.html,
         excerpt: parsedResponse.metaDescription,
-        published: false,
+        published: true,
         tags: parsedResponse.tags,
         featuredImage: publicUrl,
         readingTime: parsedResponse.readTimeMinutes,
@@ -177,7 +178,6 @@ export const action = async ({
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
     if (error instanceof Error) {
       return Response.json({ success: false, error: error.message });
     }
