@@ -10,6 +10,7 @@ import utc from "dayjs/plugin/utc";
 import "dayjs/locale/ko";
 import { useEffect } from "react";
 import { AdsenseAutoScript } from "~/components/AdsenseAutoScript";
+import { AdsenseAutoRefresh } from "~/components/AdsenseAutoRefresh";
 
 // dayjs 플러그인 및 로케일 설정
 dayjs.extend(utc);
@@ -219,6 +220,7 @@ export default function BlogPost() {
 
       <Footer />
       <AdsenseAutoScript client="ca-pub-3023499308009046" />
+      <AdsenseAutoRefresh />
     </div>
   );
 }
