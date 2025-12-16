@@ -5,6 +5,7 @@ import Navigation from "~/components/Navigation";
 import Footer from "~/components/Footer";
 import BlogCard from "~/components/BlogCard";
 import type { BlogPost } from "~/types";
+import { AdsenseAutoScript } from "~/components/AdsenseAutoScript";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -128,6 +129,7 @@ export default function BlogIndex() {
       </main>
 
       <Footer />
+      <AdsenseAutoScript client="ca-pub-3023499308009046" />
     </div>
   );
 }

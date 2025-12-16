@@ -9,7 +9,6 @@ import {
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import "~/styles/globals.css";
 import faviconList from "./lib/faviconList";
-import { AdsenseAutoScript } from "./components/AdsenseAutoScript";
 
 export const links: LinksFunction = () => [
   {
@@ -76,7 +75,6 @@ export default function App() {
         <Outlet />
         {!isBlogPost && <ScrollRestoration />}
         <Scripts />
-        <AdsenseAutoScript client="ca-pub-3023499308009046" />
       </body>
     </html>
   );
