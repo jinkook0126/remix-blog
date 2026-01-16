@@ -8,6 +8,7 @@ import relationshipPsychologyPrompt from "~/prompt/relationship/relationship-psy
 import relationshipPsychologyImagePrompt from "~/prompt/relationship/relationship-psychology-image.md?raw";
 import relationshipPsychologySummationPrompt from "~/prompt/relationship/relationship-psychology-summation.md?raw";
 import { createSummationPrompt } from "~/prompt/relationship/relationship-psychology-summation-user-prompt";
+import threadSystemPrompt from "~/prompt/relationship/threadSystem.md?raw";
 
 interface AutoPostRequestBody {
   title: string;
@@ -22,7 +23,6 @@ interface GptResponse {
   html: string;
   tags: string[];
   readTimeMinutes: number;
-  threadSummary: string;
 }
 
 const prisma = new PrismaClient();
@@ -131,6 +131,26 @@ export const action = async ({
 
     const parsedResponse: GptResponse = parseJsonResponse(chatResponse);
 
+    const threadCompletion = await openai.chat.completions.create({
+      model: "gpt-4.1-mini", // 비용 우선
+      max_tokens: 280,
+      temperature: 0.9,
+      top_p: 0.9,
+      frequency_penalty: 0.6,
+      presence_penalty: 0.7,
+      messages: [
+        {
+          role: "system",
+          content: threadSystemPrompt,
+        },
+        {
+          role: "user",
+          content: `[원문 내용]\n${mainText}`,
+        },
+      ],
+    });
+
+    const threadResponse = threadCompletion.choices[0]?.message?.content;
     const imageResponse = await openai.images.generate({
       model: "dall-e-3",
       prompt: `${relationshipPsychologyImagePrompt}\n\n제목 : ${
@@ -161,18 +181,18 @@ export const action = async ({
         tags: parsedResponse.tags,
         featuredImage: publicUrl,
         readingTime: parsedResponse.readTimeMinutes,
-        thread: parsedResponse.threadSummary,
+        thread: threadResponse,
         publishedAt: new Date(),
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     });
-
+    const postUrl = `${process.env.SITE_URL}/blog/${parsedResponse.slug}`;
     return Response.json(
       {
         success: true,
-        thread: parsedResponse.threadSummary,
-        postingUrl: `${process.env.SITE_URL}/blog/${parsedResponse.slug}`,
+        thread: `${threadResponse}\n${postUrl}`,
+        postingUrl: postUrl,
         error: "",
       },
       { status: 200 }
