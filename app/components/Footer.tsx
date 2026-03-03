@@ -20,6 +20,11 @@ const Footer = () => {
         href: "https://www.threads.com/@lee_starworld",
         external: true,
       },
+      {
+        name: "test",
+        href: "https://ig.me/m/dailyfood_news",
+        external: true,
+      },
     ],
   };
 
