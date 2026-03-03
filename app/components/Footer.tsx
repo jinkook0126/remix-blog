@@ -22,7 +22,7 @@ const Footer = () => {
       },
       {
         name: "test",
-        href: "https://ig.me/m/xy.choi",
+        href: "https://www.instagram.com/mileverse.official/",
         external: true,
       },
     ],
