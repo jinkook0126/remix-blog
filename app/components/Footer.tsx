@@ -22,7 +22,7 @@ const Footer = () => {
       },
       {
         name: "test",
-        href: "https://ig.me/m/dailyfood_news",
+        href: "https://ig.me/m/xy.choi",
         external: true,
       },
     ],
@@ -57,7 +57,7 @@ const Footer = () => {
                     {link.external ? (
                       <a
                         href={link.href}
-                        target="_blank"
+                        // target="_blank"
                         rel="noopener noreferrer"
                         className="text-secondary-300 hover:text-primary-400 transition-colors duration-200 text-sm"
                       >
